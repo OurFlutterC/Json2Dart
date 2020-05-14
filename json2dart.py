@@ -25,6 +25,7 @@ def Json2Dart(inputUser,className):
 	open(f"{className}Model.dart","w+").write(model)
 	path = os.path.realpath(f"{className}Model.dart")
 	os.startfile(path)
+	print(model)
     	
 def getData(link):
 	req = requests.get(link)
@@ -38,16 +39,13 @@ try:
 			inputUser = getData(inputUser)
 	elif ".json" in inputUser:
 		inputUser = open(inputUser,"r").read()
-	else:
-		if "dict" in str(type(eval(inputUser))):
-			inputUser = eval("["+inputUser+"]")
-		elif "list" in str(type(eval(inputUser))):
+	if "dict" in str(type(eval(inputUser))):
+		inputUser = eval("["+inputUser+"]")
+	elif "list" in str(type(eval(inputUser))):
 			inputUser = eval(inputUser)		
+		
 
 	Json2Dart(inputUser,className)
 except NameError:
 	print("json format incorrect")
 	time.sleep(5)
-
-	
-
