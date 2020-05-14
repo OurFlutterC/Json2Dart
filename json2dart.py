@@ -18,7 +18,7 @@ def Json2Dart(inputUser,className):
 			
 		break
 	toJson = " Map<String, dynamic> toJson() {\n final Map<String, dynamic> data = new Map<String, dynamic>();"
-	fromJson = " fromJson(Map<String, dynamic> json) {"
+	fromJson = " %s.fromJson(Map<String, dynamic> json) {"%className
 	class_ = "class %s{\n" % className
 	constractor= " %s({" % className
 	model = class_ + data +"\n"+constractor+"\n"+parameters+" });\n"+"\n"+fromJson+"\n"+fromVar+" }"+"\n"+toJson+"\n"+toVar+"\n"+"  return data;"+"\n }"+"\n"+"}"
@@ -43,8 +43,7 @@ try:
 		inputUser = eval("["+inputUser+"]")
 	elif "list" in str(type(eval(inputUser))):
 			inputUser = eval(inputUser)		
-		
-
+			
 	Json2Dart(inputUser,className)
 except NameError:
 	print("json format incorrect")
