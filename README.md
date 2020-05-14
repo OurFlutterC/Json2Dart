@@ -4,7 +4,7 @@
 run Json2Dart.exe 
 past json data directly 
 or
-json file data
+Path of json file
 or 
 link Api
 click enter 
