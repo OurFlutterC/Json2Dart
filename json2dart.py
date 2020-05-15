@@ -43,12 +43,13 @@ if len(className.strip()) == 0:
 try:
     if inputUser[:4] == "http":
         inputUser = getData(inputUser)
-    elif ".json" in inputUser:
-        inputUser = open(inputUser, "r").read()
-    if "dict" in str(type(eval(inputUser))):
-        inputUser = eval("["+inputUser+"]")
-    elif "list" in str(type(eval(inputUser))):
-        inputUser = eval(inputUser)
+    else:
+        if ".json" in inputUser:
+            inputUser = open(inputUser, "r").read()
+        if "dict" in str(type(eval(inputUser))):
+            inputUser = eval("["+inputUser+"]")
+        elif "list" in str(type(eval(inputUser))):
+            inputUser = eval(inputUser)
 
     Json2Dart(inputUser, className.strip())
 except NameError or SyntaxError:
