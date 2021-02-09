@@ -17,17 +17,25 @@ def Json2Dart(inputUser, className):
             parameters += f"""  this.{u},\n"""
             fromVar += f"  {u} = json['{u}'];\n"
             toVar += f"  data['{u}'] = this.{u};\n"
-
         break
+    data+="List multi = [];"
+    fromVar+="  return super.fromJson(json);\n"
+    multi = """\nvoid setMulti(List d) {
+    List r = d.map((e) {
+      %s m = %s();
+      m.fromJson(e);
+      return m;
+    }).toList();
+    multi = r;
+  }\n"""%(className,className)
     toJson = " Map<String, dynamic> toJson() {\n final Map<String, dynamic> data = new Map<String, dynamic>();"
-    fromJson = " %s.fromJson(Map<String, dynamic> json) {" % className
-    class_ = "class %s{\n" % className
+    fromJson = " fromJson(Map<String, dynamic> json) {"
+    class_ = "class %s extends McModel{\n" % className
     constractor = " %s({" % className
     model = class_ + data + "\n"+constractor+"\n"+parameters+" });\n"+"\n"+fromJson + \
-        "\n"+fromVar+" }"+"\n"+toJson+"\n"+toVar+"\n"+"  return data;"+"\n }"+"\n"+"}"
+        "\n"+fromVar+" }"+"\n"+toJson+"\n"+toVar+"\n"+"  return data;"+"\n }"+multi+"\n"+"}"
     open(f"{className}Model.dart", "w+").write(model)
     path = os.path.realpath(f"{className}Model.dart")
-    os.startfile(path)
     print(model)
 
 
@@ -56,7 +64,6 @@ except NameError or SyntaxError:
     print(" [-] Json format incorrect")
 except FileNotFoundError:
     print(f" [-] No such file or directory: {inputUser}")
-except:
-    print(f" [-] Something not correct")
+
 
 time.sleep(5)
