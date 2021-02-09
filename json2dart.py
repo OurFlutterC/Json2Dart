@@ -15,12 +15,12 @@ def Json2Dart(inputUser, className):
             t = type(i[u])
             data += f""" {dataType[str(t)]} {u};\n"""
             parameters += f"""  this.{u},\n"""
-            fromVar += f"  {u} = json['{u}'];\n"
+            fromVar += f"  {u} = json['{u}'] ?? {u};\n"
             toVar += f"  data['{u}'] = this.{u};\n"
         break
-    data+="List multi = [];"
+    data+=" List multi = [];\n"
     fromVar+="  return super.fromJson(json);\n"
-    multi = """\nvoid setMulti(List d) {
+    multi = """\n\nvoid setMulti(List d) {
     List r = d.map((e) {
       %s m = %s();
       m.fromJson(e);
@@ -35,7 +35,6 @@ def Json2Dart(inputUser, className):
     model = class_ + data + "\n"+constractor+"\n"+parameters+" });\n"+"\n"+fromJson + \
         "\n"+fromVar+" }"+"\n"+toJson+"\n"+toVar+"\n"+"  return data;"+"\n }"+multi+"\n"+"}"
     open(f"{className}Model.dart", "w+").write(model)
-    path = os.path.realpath(f"{className}Model.dart")
     print(model)
 
 
